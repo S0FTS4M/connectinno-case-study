@@ -1,10 +1,12 @@
 
 // GameManager.cs
+using DG.Tweening;
 using UnityEngine;
 using Zenject;
 
 public class LevelsUI : MonoBehaviour
 {
+    [SerializeField] private GameObject container;
     [SerializeField] private Transform levelsGrid;
 
     private ILevelManager _levelManager;
@@ -36,5 +38,18 @@ public class LevelsUI : MonoBehaviour
                 levelButton.SetLocked();
             }
         }
+    }
+
+    public void ShowUI()
+    {
+        container.SetActive(true);
+        container.transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
+    }
+    
+
+    [System.Serializable]
+    public class Settings
+    {
+        public GameObject levelButtonPrefab;
     }
 }
