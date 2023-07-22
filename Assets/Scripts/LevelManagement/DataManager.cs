@@ -5,8 +5,11 @@ public class DataManager : IDataManager
     private const string PLAYER_DATA_KEY = "PlayerData";
     private PlayerData playerData;
 
-    public DataManager()
+    private GameManager.Settings _gameSettings;  
+
+    public DataManager(GameManager.Settings gameSettings)
     {
+        _gameSettings = gameSettings;
         LoadPlayerData();
     }
 
@@ -20,7 +23,7 @@ public class DataManager : IDataManager
         }
         else
         {
-            playerData = new PlayerData(10); //FIXME: hardcoded value
+            playerData = new PlayerData(_gameSettings.levelPrefabs.Length);
             SavePlayerData();
         }
     }
@@ -40,6 +43,11 @@ public class DataManager : IDataManager
     {
         playerData.highestUnlockedLevel = Mathf.Max(playerData.highestUnlockedLevel, level);
         SavePlayerData();
+    }
+
+    public int GetHighScore(int level)
+    {
+        return playerData.highScores[level];
     }
 
     // Rest of the code remains unchanged.

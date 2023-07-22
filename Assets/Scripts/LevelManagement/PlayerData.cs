@@ -9,4 +9,9 @@ public class PlayerData
         highestUnlockedLevel = 1; // Start with level 1 unlocked
         highScores = new int[totalLevels];
     }
+
+    public int GetHighScore(int level)
+    {
+        return highScores[level];
+    }
 }

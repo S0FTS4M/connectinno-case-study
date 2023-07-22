@@ -6,6 +6,9 @@ public class GameInstaller : MonoInstaller
     [Inject]
     LevelsUI.Settings LevelsUISettings;
 
+    [Inject]
+    GameManager.Settings GameManagerSettings;
+
     public override void InstallBindings()
     {
         // Bind LevelData list with appropriate data for each level.
@@ -25,13 +28,14 @@ public class GameInstaller : MonoInstaller
 
     private List<ILevelData> CreateLevelDataList()
     {
+        var levelDatas = new List<ILevelData>();
+
+        for (int i = 0; i < GameManagerSettings.levelPrefabs.Length; i++)
+        {
+            levelDatas.Add(new LevelData() { LevelNumber = i, HighestScore = 0 });
+        }
         // Create a list of ILevelData (LevelData) with appropriate level information.
         // For simplicity, you can hardcode the data here or load it from a file or database.
-        return new List<ILevelData>
-        {
-            new LevelData { LevelNumber = 1, HighestScore = 0 },
-            new LevelData { LevelNumber = 2, HighestScore = 0 },
-            // Add more levels here.
-        };
+        return levelDatas;
     }
 }
