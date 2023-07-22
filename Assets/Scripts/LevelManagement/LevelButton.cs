@@ -40,6 +40,9 @@ public class LevelButton : MonoBehaviour
 
         _playIconGO.SetActive(isPlayable);
         _lockIconGO.SetActive(!isPlayable);
+
+        _button.onClick.RemoveAllListeners();
+        _button.onClick.AddListener(OnPlayButtonClicked);
     }
 
     public void OnPlayButtonClicked()
