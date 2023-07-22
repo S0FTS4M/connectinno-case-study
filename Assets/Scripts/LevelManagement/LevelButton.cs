@@ -32,7 +32,7 @@ public class LevelButton : MonoBehaviour
         _levelNumber = levelData.levelNumber;
         _highestScore = levelData.highScore;
         _levelNumberText.text = "Level " + _levelNumber;
-        _highestScoreText.text = "Highest Score: " + _highestScore;
+        _highestScoreText.text = _highestScore.ToString();
 
         bool isPlayable = _levelNumber <= _dataManager.GetHighestUnlockedLevel();
         _levelNumberText.gameObject.SetActive(isPlayable);

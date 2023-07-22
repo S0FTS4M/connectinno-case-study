@@ -19,10 +19,4 @@ public class GameManager : MonoBehaviour
     {
         
     }
-
-    [System.Serializable]
-    public class Settings
-    {
-        public GameObject[] levelPrefabs;
-    }
 }

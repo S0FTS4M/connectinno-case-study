@@ -9,11 +9,14 @@ public class LevelsUI : MonoBehaviour
 {
     [SerializeField] private GameObject container;
     [SerializeField] private Transform levelsGrid;
+    [SerializeField] private GameObject playButton;
 
     private ILevelManager _levelManager;
     private IDataManager _dataManager;
 
     private LevelButton.Factory _levelButtonFactory;
+
+    private Tweener _tweener;
 
     [Inject]
     public void Construct(IDataManager dataManager, ILevelManager levelManager, LevelButton.Factory levelButtonFactory)
@@ -24,8 +27,6 @@ public class LevelsUI : MonoBehaviour
 
         int highestUnlockedLevel = _dataManager.GetHighestUnlockedLevel();
         
-        if(_levelManager == null)
-            Debug.Log("whaaaat");
         foreach (LevelData levelData in _levelManager.GetLevels())
         {
             LevelButton levelButton = _levelButtonFactory.Create();
@@ -40,12 +41,16 @@ public class LevelsUI : MonoBehaviour
         }
 
         levelManager.LevelLoaded += OnLevelLoaded;
+
+        _tweener = playButton.transform.DOScale(Vector3.one * 0.8f, 1f).SetLoops(-1, LoopType.Yoyo);
     }
 
     public void ShowUI()
     {
         container.SetActive(true);
         container.transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
+        playButton.SetActive(false);
+        _tweener.Kill();
     }
 
     public void HideUI()

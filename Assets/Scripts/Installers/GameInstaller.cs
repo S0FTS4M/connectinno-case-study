@@ -6,14 +6,11 @@ public class GameInstaller : MonoInstaller
     [Inject]
     LevelsUI.Settings LevelsUISettings;
 
+    [Inject]
+    Tile.Settings TileSettings;
 
     public override void InstallBindings()
     {
-        // Bind LevelData list with appropriate data for each level.
-        // Container.Bind<List<ILevelData>>().FromInstance(CreateLevelDataList()).AsSingle();
-
-        // Bind LevelManager interface to LevelManager implementation.
-
         Container.Bind<ILevelDataManager>().To<LevelDataManager>().AsSingle();
 
         // Bind DataManager interface to DataManager implementation.
@@ -22,9 +19,8 @@ public class GameInstaller : MonoInstaller
 
         Container.Bind<IDataManager>().To<DataManager>().AsSingle();
 
-        // Bind other necessary dependencies.
 
         Container.BindFactory<LevelButton, LevelButton.Factory>().FromComponentInNewPrefab(LevelsUISettings.levelButtonPrefab);
-
+        Container.BindMemoryPool<Tile, TilePool>().WithInitialSize(50).FromComponentInNewPrefab(TileSettings.tilePrefab);
     }
 }

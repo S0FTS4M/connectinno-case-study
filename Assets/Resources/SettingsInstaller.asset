@@ -14,3 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelsUISettings:
     levelButtonPrefab: {fileID: 6975168882037981104, guid: 0eb54f438c8528f439836589ca563cb7, type: 3}
+  TileSettings:
+    tilePrefab: {fileID: 7958363156952706473, guid: 97c3f30ac40c8304eb95d77b72e450fd, type: 3}
+    itemDatas:
+    - {fileID: 11400000, guid: 7669154f1df8023449b56f9088bfbe43, type: 2}
+    - {fileID: 11400000, guid: 0e8b5e2b3d35dad42b52d218ec06643b, type: 2}
+    - {fileID: 11400000, guid: bff17b82087562847a1021e289072e2c, type: 2}
+    - {fileID: 11400000, guid: 6e223bbd6f6658f43b33aeef7ab5e89e, type: 2}
+    - {fileID: 11400000, guid: 4884dc6f4cc93a34db4ff64e0811ca50, type: 2}
+    - {fileID: 11400000, guid: 5c07b28781edba94283c7e89b8c82bf2, type: 2}
+    - {fileID: 11400000, guid: 8eda858afde777240b51157bea938823, type: 2}
+    - {fileID: 11400000, guid: 79a108a4b3df358489fce72cb2157ae0, type: 2}
+    defaultSprite: {fileID: 21300000, guid: 722752f6d4aaf634fa491d6d65be67a6, type: 3}
+    pressedSprite: {fileID: 21300000, guid: 1a8cec7fab46ac846bf8535456850ed5, type: 3}
+    brokenTileSprites: []
