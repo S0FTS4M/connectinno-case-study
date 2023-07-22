@@ -1,5 +1,7 @@
 // GridManager.cs
+using System;
 using UnityEngine;
+using Zenject;
 
 public class GridManager : MonoBehaviour
 {
@@ -10,6 +12,15 @@ public class GridManager : MonoBehaviour
 
     private Tile[,] grid;
 
-    // Code to handle tile connections and checking for matches
+    [Inject]
+    public void Construct(ILevelManager levelManager)
+    {
+         levelManager.LevelLoaded += OnLevelLoaded;
+    }
+
+    private void OnLevelLoaded(LevelData level)
+    {
+        
+    }
 }
 

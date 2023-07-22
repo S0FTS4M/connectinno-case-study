@@ -18,16 +18,19 @@ public class LevelButton : MonoBehaviour
 
     private IDataManager _dataManager;
 
+    private ILevelManager _levelManager;
+
     [Inject]
-    public void Construct(IDataManager dataManager)
+    public void Construct(IDataManager dataManager,ILevelManager levelManager)
     {
         this._dataManager = dataManager;
+        this._levelManager = levelManager;
     }
 
-    public void Initialize(ILevelData levelData)
+    public void Initialize(LevelData levelData)
     {
-        _levelNumber = levelData.LevelNumber;
-        _highestScore = levelData.HighestScore;
+        _levelNumber = levelData.levelNumber;
+        _highestScore = levelData.highScore;
         _levelNumberText.text = "Level " + _levelNumber;
         _highestScoreText.text = "Highest Score: " + _highestScore;
 
@@ -50,6 +53,7 @@ public class LevelButton : MonoBehaviour
         // Load the specific level scene using LevelSceneLoader.
         // Pass levelNumber or levelData to the LevelSceneLoader.
 
+        _levelManager.LoadLevel(_levelNumber);
         // Update the highest unlocked level if the player successfully completes the current level
         _dataManager.SetHighestUnlockedLevel(_levelNumber + 1);
     }

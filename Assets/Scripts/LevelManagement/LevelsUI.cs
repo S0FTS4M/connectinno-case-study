@@ -1,5 +1,6 @@
 
 // GameManager.cs
+using System;
 using DG.Tweening;
 using UnityEngine;
 using Zenject;
@@ -20,24 +21,25 @@ public class LevelsUI : MonoBehaviour
         this._dataManager = dataManager;
         this._levelManager = levelManager;
         this._levelButtonFactory = levelButtonFactory;
-    }
 
-    private void Start()
-    {
         int highestUnlockedLevel = _dataManager.GetHighestUnlockedLevel();
-
-        foreach (ILevelData levelData in _levelManager.GetLevels())
+        
+        if(_levelManager == null)
+            Debug.Log("whaaaat");
+        foreach (LevelData levelData in _levelManager.GetLevels())
         {
             LevelButton levelButton = _levelButtonFactory.Create();
             levelButton.transform.SetParent(levelsGrid);
             levelButton.Initialize(levelData);
 
             // If the level is locked, disable the play button
-            if (levelData.LevelNumber > highestUnlockedLevel)
+            if (levelData.levelNumber > highestUnlockedLevel)
             {
                 levelButton.SetLocked();
             }
         }
+
+        levelManager.LevelLoaded += OnLevelLoaded;
     }
 
     public void ShowUI()
@@ -45,7 +47,17 @@ public class LevelsUI : MonoBehaviour
         container.SetActive(true);
         container.transform.DOPunchScale(Vector3.one * 0.1f, 0.2f);
     }
-    
+
+    public void HideUI()
+    {
+        container.transform.DOPunchScale(Vector3.one * -0.1f, 0.2f).OnComplete(() => container.SetActive(false));
+    }
+
+    private void OnLevelLoaded(LevelData level)
+    {
+        HideUI();
+    }
+
 
     [System.Serializable]
     public class Settings

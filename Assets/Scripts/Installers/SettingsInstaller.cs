@@ -5,12 +5,10 @@ using Zenject;
 public class SettingsInstaller : ScriptableObjectInstaller<SettingsInstaller>
 {
     public LevelsUI.Settings LevelsUISettings;
-    public GameManager.Settings GameManagerSettings;
 
     public override void InstallBindings()
     {
         Container.BindInstance(LevelsUISettings);
-        Container.BindInstance(GameManagerSettings);
     }
 }
 

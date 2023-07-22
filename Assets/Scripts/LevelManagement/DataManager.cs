@@ -5,11 +5,12 @@ public class DataManager : IDataManager
     private const string PLAYER_DATA_KEY = "PlayerData";
     private PlayerData playerData;
 
-    private GameManager.Settings _gameSettings;  
+    private int totalLevelCount ;
 
-    public DataManager(GameManager.Settings gameSettings)
+    public DataManager(ILevelManager levelManager)
     {
-        _gameSettings = gameSettings;
+        var levels = levelManager.GetLevels();
+        totalLevelCount = levels.Count;
         LoadPlayerData();
     }
 
@@ -23,7 +24,7 @@ public class DataManager : IDataManager
         }
         else
         {
-            playerData = new PlayerData(_gameSettings.levelPrefabs.Length);
+            playerData = new PlayerData(totalLevelCount);
             SavePlayerData();
         }
     }

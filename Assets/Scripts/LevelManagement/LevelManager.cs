@@ -1,27 +1,26 @@
+// LevelManager.cs
 using System.Collections.Generic;
+using UnityEngine;
+using Zenject;
 
 public class LevelManager : ILevelManager
 {
-    private List<ILevelData> _levels;
-    private IDataManager _playerData;
+    private ILevelDataManager levelDataManager;
 
-    public LevelManager(List<ILevelData> levels, IDataManager playerData)
+    public event LevelLoadedHandler LevelLoaded;
+
+    public LevelManager(ILevelDataManager levelDataManager)
     {
-        this._levels = levels;
-        this._playerData = playerData;
-
-        for(int i = 0; i < _levels.Count; i++)
-        {
-            _levels[i].HighestScore = _playerData.GetHighScore(i);
-        }
+        this.levelDataManager = levelDataManager;
     }
-    
 
-    // Implement methods to retrieve levels, update highest scores, etc.
-
-    // In the real implementation, you would have methods to fetch levels from your level data source.
-    public List<ILevelData> GetLevels()
+    public List<LevelData> GetLevels()
     {
-        return _levels;
+        return levelDataManager.GetLevelDataList();
+    }
+
+    public void LoadLevel(int index)
+    {
+        LevelLoaded?.Invoke(GetLevels()[index]);
     }
 }

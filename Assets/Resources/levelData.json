@@ -1,0 +1,164 @@
+{
+    "levels": [
+        {
+            "levelNumber": 1,
+            "totalMoves": 15,
+            "row": 5,
+            "column": 5,
+            "targetObjectives": [
+                {
+                    "count": 5,
+                    "name": "Apple"
+                },
+                {
+                    "count": 3,
+                    "name": "Leaf"
+                }
+            ]
+        },
+        {
+            "levelNumber": 2,
+            "totalMoves": 20,
+            "row": 6,
+            "column": 6,
+            "targetObjectives": [
+                {
+                    "count": 4,
+                    "name": "GreenLeaf"
+                },
+                {
+                    "count": 6,
+                    "name": "Pumpkin"
+                }
+            ]
+        },
+        {
+            "levelNumber": 3,
+            "totalMoves": 18,
+            "row": 5,
+            "column": 5,
+            "targetObjectives": [
+                {
+                    "count": 4,
+                    "name": "Banana"
+                },
+                {
+                    "count": 5,
+                    "name": "WaterDrop"
+                }
+            ]
+        },
+        {
+            "levelNumber": 4,
+            "totalMoves": 25,
+            "row": 7,
+            "column": 7,
+            "targetObjectives": [
+                {
+                    "count": 6,
+                    "name": "Grape"
+                },
+                {
+                    "count": 8,
+                    "name": "DragonFruit"
+                }
+            ]
+        },
+        {
+            "levelNumber": 5,
+            "totalMoves": 22,
+            "row": 6,
+            "column": 6,
+            "targetObjectives": [
+                {
+                    "count": 5,
+                    "name": "Apple"
+                },
+                {
+                    "count": 4,
+                    "name": "Pumpkin"
+                }
+            ]
+        },
+        {
+            "levelNumber": 6,
+            "totalMoves": 17,
+            "row": 5,
+            "column": 5,
+            "targetObjectives": [
+                {
+                    "count": 4,
+                    "name": "Grape"
+                },
+                {
+                    "count": 5,
+                    "name": "WaterDrop"
+                }
+            ]
+        },
+        {
+            "levelNumber": 7,
+            "totalMoves": 19,
+            "row": 6,
+            "column": 6,
+            "targetObjectives": [
+                {
+                    "count": 4,
+                    "name": "GreenLeaf"
+                },
+                {
+                    "count": 6,
+                    "name": "DragonFruit"
+                }
+            ]
+        },
+        {
+            "levelNumber": 8,
+            "totalMoves": 21,
+            "row": 5,
+            "column": 5,
+            "targetObjectives": [
+                {
+                    "count": 5,
+                    "name": "Apple"
+                },
+                {
+                    "count": 3,
+                    "name": "Leaf"
+                }
+            ]
+        },
+        {
+            "levelNumber": 9,
+            "totalMoves": 20,
+            "row": 6,
+            "column": 6,
+            "targetObjectives": [
+                {
+                    "count": 4,
+                    "name": "Pumpkin"
+                },
+                {
+                    "count": 6,
+                    "name": "WaterDrop"
+                }
+            ]
+        },
+        {
+            "levelNumber": 10,
+            "totalMoves": 18,
+            "row": 5,
+            "column": 5,
+            "targetObjectives": [
+                {
+                    "count": 4,
+                    "name": "Banana"
+                },
+                {
+                    "count": 5,
+                    "name": "Grape"
+                }
+            ]
+        }
+    ]
+}
