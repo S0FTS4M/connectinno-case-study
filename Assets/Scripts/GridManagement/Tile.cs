@@ -1,6 +1,8 @@
 // GridManager.cs
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 // Tile.cs
 public class Tile : MonoBehaviour
 {
@@ -13,6 +15,17 @@ public class Tile : MonoBehaviour
     public ItemData ItemData => _itemData;
 
     private TileView _tileView;
+
+    private Settings _settings;
+
+    private RectTransform _rectTransform;
+
+    [Inject]
+    private void Construct(Settings settings)
+    {
+        _settings = settings;
+        _rectTransform = GetComponent<RectTransform>();
+    }
 
     public void SetItemData(ItemData itemData)
     {
@@ -30,9 +43,28 @@ public class Tile : MonoBehaviour
     {
         _tileView.OnTileReleased();
     }
-    
+
     public void BreakTile()
     {
+        var broken = Instantiate(_settings.brokenTilePrefab, transform.position, Quaternion.identity);
+        broken.transform.SetParent(transform);
+        broken.transform.localPosition = Vector3.zero;
+
+        foreach (Transform child in broken.transform)
+        {
+            var rb = child.GetComponent<Rigidbody2D>();
+            var rndVec = Random.insideUnitCircle.normalized;
+            rb.AddForce(100 * rndVec, ForceMode2D.Impulse);
+        }
+        
+        StartCoroutine(DestroyTile(broken));
+
+    }
+
+    private IEnumerator DestroyTile(GameObject broken)
+    {
+        yield return new WaitForSeconds(0.4f);
+        Destroy(broken);
     }
 
     public void HideTile()
@@ -49,7 +81,7 @@ public class Tile : MonoBehaviour
             // The neighbor is not adjacent, return false
             return false;
         }
-        
+
         // The neighbor is both adjacent and within the grid boundaries, return true
         return true;
     }
@@ -66,7 +98,7 @@ public class Tile : MonoBehaviour
 
         public Sprite pressedSprite;
 
-        public Sprite[] brokenTileSprites;
+        public GameObject brokenTilePrefab;
 
         private Dictionary<string, ItemData> _itemDatas;
 

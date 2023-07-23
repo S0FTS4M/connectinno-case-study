@@ -27,7 +27,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 79a108a4b3df358489fce72cb2157ae0, type: 2}
     defaultSprite: {fileID: -389513073, guid: 722752f6d4aaf634fa491d6d65be67a6, type: 3}
     pressedSprite: {fileID: -1453596166, guid: 25a9fd4416e6a0142ae3ad3d3be7d11c, type: 3}
-    brokenTileSprites: []
+    brokenTilePrefab: {fileID: 2881395729856989237, guid: b5a7684f24a22ab47b7abe0aca9e054d, type: 3}
   LevelButtonSettings:
     greenColor: {r: 0, g: 0.78431374, b: 0.3254902, a: 1}
     grayColor: {r: 0.5137255, g: 0.5686275, b: 0.6117647, a: 1}

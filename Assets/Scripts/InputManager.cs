@@ -83,7 +83,7 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
             tile.HideTile();
 
-            Debug.Log(tile.row + " " + tile.col);
+            tile.BreakTile();
 
             //Update move
 

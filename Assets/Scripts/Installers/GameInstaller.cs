@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 public class GameInstaller : MonoInstaller
 {
+    [SerializeField]
+    private Camera mainCamera;
+    
     [Inject]
     LevelSelectionUI.Settings LevelsUISettings;
 
@@ -18,6 +22,8 @@ public class GameInstaller : MonoInstaller
         Container.Bind<ILevelManager>().To<LevelManager>().AsSingle();
         Container.Bind<IDataManager>().To<DataManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<PlayerGoalsManager>().AsSingle();
+
+        Container.Bind<Camera>().FromInstance(mainCamera).AsSingle();
 
 
         Container.BindFactory<LevelButton, LevelButton.Factory>().FromComponentInNewPrefab(LevelsUISettings.levelButtonPrefab);
