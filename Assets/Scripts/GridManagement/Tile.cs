@@ -20,6 +20,39 @@ public class Tile : MonoBehaviour
         this._itemData = itemData;
         _tileView.SetTile(this);
     }
+
+    public void OnTilePressed()
+    {
+        _tileView.OnTilePressed();
+    }
+
+    public void OnTileReleased()
+    {
+        _tileView.OnTileReleased();
+    }
+    
+    public void BreakTile()
+    {
+    }
+
+    public void HideTile()
+    {
+        _tileView.HideTile();
+    }
+
+    public bool IsValidNeighbor(Tile tile)
+    {
+        // Check if the given row and column indices are adjacent to the current tile
+        bool isAdjacent = Mathf.Abs(tile.row - row) <= 1 && Mathf.Abs(tile.col - col) <= 1;
+        if (!isAdjacent)
+        {
+            // The neighbor is not adjacent, return false
+            return false;
+        }
+        
+        // The neighbor is both adjacent and within the grid boundaries, return true
+        return true;
+    }
     // Code to handle tile interactions and visuals
 
     [System.Serializable]
@@ -39,15 +72,15 @@ public class Tile : MonoBehaviour
 
         public ItemData GetItemData(string itemName)
         {
-            if(_itemDatas == null)
+            if (_itemDatas == null)
             {
                 _itemDatas = new Dictionary<string, ItemData>();
-                foreach(var itemData in itemDatas)
+                foreach (var itemData in itemDatas)
                 {
                     _itemDatas.Add(itemData.name, itemData);
                 }
             }
-            
+
             return _itemDatas[itemName];
         }
     }

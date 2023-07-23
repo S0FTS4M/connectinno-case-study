@@ -35,6 +35,11 @@ public class TileView : MonoBehaviour
     {
         tileImage.sprite = _tileSettings.defaultSprite;
     }
+
+    public void HideTile()
+    {
+        tileImage.gameObject.SetActive(false);
+    }
     
 }
 

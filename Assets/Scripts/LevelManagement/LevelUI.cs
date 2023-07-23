@@ -26,6 +26,8 @@ public class LevelUI : MonoBehaviour
         _playerGoalsManager = goalsManager;
         _playerGoalPool = playerGoalPool;
         levelManager.LevelLoaded += OnLevelLoaded;
+
+        _playerGoalsManager.PlayerGoalUpdated += OnPlayerGoalUpdated;
     }
 
     public void Initialize(LevelData level)
@@ -39,7 +41,7 @@ public class LevelUI : MonoBehaviour
     {
         if (_playerGoalsManager != null)
         {
-            var playerGoals = _playerGoalsManager.GetPlayerGoalsForLevel(_currentLevelNumber);
+            var playerGoals = _playerGoalsManager.GetPlayerGoals();
             if (playerGoals != null)
             {
                 _moveCountText.text = _currentMoveCount.ToString();
@@ -70,6 +72,22 @@ public class LevelUI : MonoBehaviour
     {
         _currentMoveCount++;
         _moveCountText.text = _currentMoveCount.ToString();
+    }
+
+    private void OnPlayerGoalUpdated(PlayerGoalData playerGoalData)
+    {
+        if (_goals.ContainsKey(playerGoalData.itemName) && playerGoalData.targetCount <= 0)
+        {
+            _playerGoalPool.Despawn(_goals[playerGoalData.itemName]);
+            return;
+        }
+
+        if(_goals.ContainsKey(playerGoalData.itemName))
+        {
+            _goals[playerGoalData.itemName].SetGoal(playerGoalData);
+        }
+
+    
     }
 
     private void OnLevelLoaded(LevelData level)

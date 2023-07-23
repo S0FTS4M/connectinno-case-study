@@ -22,12 +22,15 @@ public class LevelButton : MonoBehaviour
 
     private Settings _settings;
 
+    private PlayerGoalsManager _playerGoalsManager;
+
     [Inject]
-    public void Construct(IDataManager dataManager,ILevelManager levelManager, Settings settings)
+    public void Construct(IDataManager dataManager,ILevelManager levelManager, Settings settings, PlayerGoalsManager playerGoalsManager)
     {
         this._dataManager = dataManager;
         this._levelManager = levelManager;
         this._settings = settings;
+        this._playerGoalsManager = playerGoalsManager;
     }
 
     public void Initialize(LevelData levelData)
@@ -58,6 +61,7 @@ public class LevelButton : MonoBehaviour
         // Load the specific level scene using LevelSceneLoader.
         // Pass levelNumber or levelData to the LevelSceneLoader.
 
+        _playerGoalsManager.InitializePlayerGoalsForLevel(_levelNumber);
         _levelManager.LoadLevel(_levelNumber);
         // Update the highest unlocked level if the player successfully completes the current level
         _dataManager.SetHighestUnlockedLevel(_levelNumber + 1);

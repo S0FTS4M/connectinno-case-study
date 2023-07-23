@@ -2,46 +2,49 @@
 // PlayerGoalsManager.cs
 using System.Collections.Generic;
 
+public delegate void PlayerGoalUpdated(PlayerGoalData playerGoalData);
+
 public class PlayerGoalsManager
 {
     private List<LevelData> levelDataList;
-    private Dictionary<int, List<PlayerGoalData>> playerGoalsDictionary;
+    List<PlayerGoalData> playerGoals;
+
+    public event PlayerGoalUpdated PlayerGoalUpdated;
 
     public PlayerGoalsManager(ILevelDataManager levelDataManager)
     {
         levelDataList = levelDataManager.GetLevelDataList();
-        playerGoalsDictionary = new Dictionary<int, List<PlayerGoalData>>();
-
-        InitializePlayerGoals();
     }
 
-    private void InitializePlayerGoals()
+    public void InitializePlayerGoalsForLevel(int levelNumber)
     {
-        foreach (var levelData in levelDataList)
-        {
-            int levelNumber = levelData.levelNumber;
-            List<PlayerGoalData> playerGoals = new List<PlayerGoalData>();
+        playerGoals = new List<PlayerGoalData>();
+        var levelData = levelDataList[levelNumber - 1];
 
-            foreach (var targetObjective in levelData.targetObjectives)
+        foreach (var targetObjective in levelData.targetObjectives)
+        {
+            playerGoals.Add(new PlayerGoalData
             {
-                playerGoals.Add(new PlayerGoalData
-                {
-                    itemName = targetObjective.name,
-                    targetCount = targetObjective.count,
-                });
-            }
-
-            playerGoalsDictionary.Add(levelNumber, playerGoals);
+                itemName = targetObjective.name,
+                targetCount = targetObjective.count,
+            });
         }
     }
 
-    public List<PlayerGoalData> GetPlayerGoalsForLevel(int levelNumber)
+    public List<PlayerGoalData> GetPlayerGoals()
     {
-        if (playerGoalsDictionary.TryGetValue(levelNumber, out var playerGoals))
-        {
-            return playerGoals;
-        }
+        return playerGoals;
+    }
 
-        return null; // Level number not found
+    public void UpdatePlayerGoal(string itemName, int amount)
+    {
+        var playerGoal = playerGoals.Find(x => x.itemName == itemName);
+        if (playerGoal == null)
+        {
+            return;
+        }
+        
+        playerGoal.targetCount -= amount;
+        PlayerGoalUpdated?.Invoke(playerGoal);
     }
 }
