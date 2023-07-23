@@ -11,6 +11,8 @@ public class LevelsUI : MonoBehaviour
     [SerializeField] private Transform levelsGrid;
     [SerializeField] private GameObject playButton;
 
+    [SerializeField] private CanvasGroup canvasGroup;
+
     private ILevelManager _levelManager;
     private IDataManager _dataManager;
 
@@ -55,7 +57,7 @@ public class LevelsUI : MonoBehaviour
 
     public void HideUI()
     {
-        container.transform.DOPunchScale(Vector3.one * -0.1f, 0.2f).OnComplete(() => container.SetActive(false));
+        canvasGroup.DOFade(0f, 0.5f).OnComplete(() => container.SetActive(false));
     }
 
     private void OnLevelLoaded(LevelData level)

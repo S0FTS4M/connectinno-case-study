@@ -13,18 +13,21 @@ public class LevelButton : MonoBehaviour
     [SerializeField] private Button _button;
     [SerializeField] private TextMeshProUGUI _levelNumberText;
     [SerializeField] private TextMeshProUGUI _highestScoreText;
-    [SerializeField] private GameObject _lockIconGO;
-    [SerializeField] private GameObject _playIconGO;
+    [SerializeField] private Image _playIcon;
+    [SerializeField] private GameObject _highScoreGroup;
 
     private IDataManager _dataManager;
 
     private ILevelManager _levelManager;
 
+    private Settings _settings;
+
     [Inject]
-    public void Construct(IDataManager dataManager,ILevelManager levelManager)
+    public void Construct(IDataManager dataManager,ILevelManager levelManager, Settings settings)
     {
         this._dataManager = dataManager;
         this._levelManager = levelManager;
+        this._settings = settings;
     }
 
     public void Initialize(LevelData levelData)
@@ -35,15 +38,17 @@ public class LevelButton : MonoBehaviour
         _highestScoreText.text = _highestScore.ToString();
 
         bool isPlayable = _levelNumber <= _dataManager.GetHighestUnlockedLevel();
-        _levelNumberText.gameObject.SetActive(isPlayable);
-        _highestScoreText.gameObject.SetActive(isPlayable);
+
+        var displayHighScore = _dataManager.GetHighScore(_levelNumber) > 0;
+        _highScoreGroup.gameObject.SetActive(displayHighScore);
+        
 
         // Check if the level is playable (unlocked) and update the button appearance accordingly
         _button.interactable = isPlayable;
 
-        _playIconGO.SetActive(isPlayable);
-        _lockIconGO.SetActive(!isPlayable);
+        _playIcon.color = isPlayable ? _settings.greenColor : _settings.grayColor;
 
+        // Add the button click listener
         _button.onClick.RemoveAllListeners();
         _button.onClick.AddListener(OnPlayButtonClicked);
     }
@@ -61,18 +66,24 @@ public class LevelButton : MonoBehaviour
     public void SetLocked()
     {
         _button.interactable = false;
-        //show lock icon
-        _playIconGO.SetActive(false);
-        _lockIconGO.SetActive(true);
+        _playIcon.color = _settings.grayColor;
+        _highScoreGroup.SetActive(false);
+        
     }
 
     public void SetPlayable()
     {
         _button.interactable = true;
-        //show play icon
-        _playIconGO.SetActive(true);
-        _lockIconGO.SetActive(false);
+        _playIcon.color = _settings.greenColor;
+        _highScoreGroup.SetActive(true);
     }
 
     public class Factory : PlaceholderFactory<LevelButton> { }
+
+    [System.Serializable]
+    public class Settings
+    {
+        public Color greenColor;
+        public Color grayColor;
+    }
 }

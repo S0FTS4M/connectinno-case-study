@@ -48,7 +48,7 @@ public class DataManager : IDataManager
 
     public int GetHighScore(int level)
     {
-        return playerData.highScores[level];
+        return playerData.highScores[level - 1];
     }
 
     // Rest of the code remains unchanged.
