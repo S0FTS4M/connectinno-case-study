@@ -1,4 +1,5 @@
 // GridManager.cs
+using System.Collections.Generic;
 using UnityEngine;
 // Tile.cs
 public class Tile : MonoBehaviour
@@ -25,6 +26,7 @@ public class Tile : MonoBehaviour
     public class Settings
     {
         public GameObject tilePrefab;
+
         public ItemData[] itemDatas;
 
         public Sprite defaultSprite;
@@ -32,6 +34,22 @@ public class Tile : MonoBehaviour
         public Sprite pressedSprite;
 
         public Sprite[] brokenTileSprites;
+
+        private Dictionary<string, ItemData> _itemDatas;
+
+        public ItemData GetItemData(string itemName)
+        {
+            if(_itemDatas == null)
+            {
+                _itemDatas = new Dictionary<string, ItemData>();
+                foreach(var itemData in itemDatas)
+                {
+                    _itemDatas.Add(itemData.name, itemData);
+                }
+            }
+            
+            return _itemDatas[itemName];
+        }
     }
 }
 

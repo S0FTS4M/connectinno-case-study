@@ -4,23 +4,24 @@ using Zenject;
 public class GameInstaller : MonoInstaller
 {
     [Inject]
-    LevelsUI.Settings LevelsUISettings;
+    LevelSelectionUI.Settings LevelsUISettings;
 
     [Inject]
     Tile.Settings TileSettings;
 
+    [Inject]
+    PlayerGoal.Settings PlayerGoalSettings;
+
     public override void InstallBindings()
     {
         Container.Bind<ILevelDataManager>().To<LevelDataManager>().AsSingle();
-
-        // Bind DataManager interface to DataManager implementation.
         Container.Bind<ILevelManager>().To<LevelManager>().AsSingle();
-
-
         Container.Bind<IDataManager>().To<DataManager>().AsSingle();
+        Container.BindInterfacesAndSelfTo<PlayerGoalsManager>().AsSingle();
 
 
         Container.BindFactory<LevelButton, LevelButton.Factory>().FromComponentInNewPrefab(LevelsUISettings.levelButtonPrefab);
         Container.BindMemoryPool<Tile, TilePool>().WithInitialSize(50).FromComponentInNewPrefab(TileSettings.tilePrefab);
+        Container.BindMemoryPool<PlayerGoal, PlayerGoal.PlayerGoalPool>().FromComponentInNewPrefab(PlayerGoalSettings.goalPrefab);
     }
 }

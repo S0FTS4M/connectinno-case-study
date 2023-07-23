@@ -5,7 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using Zenject;
 
-public class LevelsUI : MonoBehaviour
+public class LevelSelectionUI : MonoBehaviour
 {
     [SerializeField] private GameObject container;
     [SerializeField] private Transform levelsGrid;

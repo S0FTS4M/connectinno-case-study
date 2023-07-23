@@ -31,3 +31,5 @@ MonoBehaviour:
   LevelButtonSettings:
     greenColor: {r: 0, g: 0.78431374, b: 0.3254902, a: 1}
     grayColor: {r: 0.5137255, g: 0.5686275, b: 0.6117647, a: 1}
+  PlayerGoalSettings:
+    goalPrefab: {fileID: 4658946759342761818, guid: f755c802198d14948bce0bfab5c1d241, type: 3}
