@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DataManager : IDataManager
@@ -12,7 +13,15 @@ public class DataManager : IDataManager
         var levels = levelManager.GetLevels();
         totalLevelCount = levels.Count;
         LoadPlayerData();
+
+        foreach (var level in levels)
+        {
+            level.highScore = GetHighScore(level.levelNumber);
+        }
+
+        levelManager.LevelCompleted +=OnLevelCompleted;
     }
+
 
     private void LoadPlayerData()
     {
@@ -49,6 +58,18 @@ public class DataManager : IDataManager
     public int GetHighScore(int level)
     {
         return playerData.highScores[level - 1];
+    }
+
+    public void SetHighScore(int level, int score)
+    {
+        playerData.highScores[level - 1] = score;
+        SavePlayerData();
+    }
+
+    private void OnLevelCompleted(LevelData data, bool isHighScoreSet)
+    {
+        if(isHighScoreSet)
+        SetHighScore(data.levelNumber, data.highScore);
     }
 
     // Rest of the code remains unchanged.

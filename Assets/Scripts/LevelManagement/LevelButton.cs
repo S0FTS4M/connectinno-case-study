@@ -45,7 +45,8 @@ public class LevelButton : MonoBehaviour
 
         bool isPlayable = _levelNumber <= _dataManager.GetHighestUnlockedLevel();
 
-        var displayHighScore = _dataManager.GetHighScore(_levelNumber) > 0;
+        var displayHighScore = levelData.highScore > 0;
+        Debug.Log(displayHighScore);
         _highScoreGroup.gameObject.SetActive(displayHighScore);
         
 
@@ -86,8 +87,7 @@ public class LevelButton : MonoBehaviour
     {
         _button.interactable = true;
         //TODO: change the ease type later 
-        _playIcon.DOColor(_settings.greenColor, 2f).SetEase(Ease.InExpo);
-        _highScoreGroup.SetActive(true);
+        _playIcon.DOColor(_settings.greenColor, 1.5f).SetEase(Ease.InExpo);
     }
 
     public class Factory : PlaceholderFactory<LevelButton> { }
