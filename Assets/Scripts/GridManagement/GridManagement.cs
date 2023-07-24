@@ -26,6 +26,8 @@ public class GridManager : MonoBehaviour
         _gridLayoutGroup = _gridParent.GetComponent<GridLayoutGroup>();
 
         levelManager.LevelLoaded += OnLevelLoaded;
+
+        levelManager.LevelCompleted += OnLevelCompleted;
     }
 
     private void OnLevelLoaded(LevelData level)
@@ -80,8 +82,11 @@ public class GridManager : MonoBehaviour
         foreach (var objective in targetObjectives)
         {
             var itemData = _tileSettings.GetItemData(objective.name);
+            
+            //NOTE: I am trying to make sure there are at least 3 items or multiples of 3 in each objective in order to make the game more playable
+            var remainingObjectiveCount = 3 - (objective.count % 3 == 0 ? 3 : objective.count % 3);
 
-            for (int i = 0; i < objective.count; i++)
+            for (int i = 0; i < objective.count + remainingObjectiveCount; i++)
             {
                 var rndX = UnityEngine.Random.Range(0, _grid.GetLength(0));
                 var rndY = UnityEngine.Random.Range(0, _grid.GetLength(1));
@@ -114,6 +119,11 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private void OnLevelCompleted(LevelData levelData, bool isHighScoreSet)
+    {
+        DespawnAllTiles();
+    }
+
     private void DespawnAllTiles()
     {
         if (_grid == null)
@@ -126,6 +136,8 @@ public class GridManager : MonoBehaviour
                 _tilePool.Despawn(_grid[i, j]);
             }
         }
+
+        _grid = null;
     }
 }
 

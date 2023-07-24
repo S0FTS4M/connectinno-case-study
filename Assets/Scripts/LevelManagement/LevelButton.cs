@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,8 @@ public class LevelButton : MonoBehaviour
 
     private PlayerGoalsManager _playerGoalsManager;
 
+    private LevelData _levelData;
+
     [Inject]
     public void Construct(IDataManager dataManager,ILevelManager levelManager, Settings settings, PlayerGoalsManager playerGoalsManager)
     {
@@ -33,6 +36,8 @@ public class LevelButton : MonoBehaviour
 
     public void Initialize(LevelData levelData)
     {
+        _levelData = levelData;
+    
         _levelNumber = levelData.levelNumber;
         _highestScore = levelData.highScore;
         _levelNumberText.text = "Level " + _levelNumber;
@@ -71,10 +76,16 @@ public class LevelButton : MonoBehaviour
         
     }
 
+    public void SetHighScore()
+    {
+        _highScoreGroup.SetActive(true);
+        _highestScoreText.text = _levelData.highScore.ToString();
+    }
+
     public void SetPlayable()
     {
         _button.interactable = true;
-        _playIcon.color = _settings.greenColor;
+        _playIcon.DOColor(_settings.greenColor, 2f).SetEase(Ease.InExpo);
         _highScoreGroup.SetActive(true);
     }
 

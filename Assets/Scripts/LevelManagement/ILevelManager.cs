@@ -5,8 +5,8 @@ public interface ILevelManager
 {
     event LevelLoadedHandler LevelLoaded;
     event PlayerMadeAMoveHandler PlayerMadeMove;
-    event Action LevelFailed;
-    event Action<bool> LevelCompleted;
+    event Action<LevelData> LevelFailed;
+    event Action<LevelData,bool> LevelCompleted;
     List<LevelData> GetLevels();
 
     void LoadLevel(int index);

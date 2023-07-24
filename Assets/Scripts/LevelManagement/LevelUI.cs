@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Zenject;
 using System.Collections.Generic;
+using System;
 
 public class LevelUI : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class LevelUI : MonoBehaviour
 
     private void SetupUI()
     {
+        DeSpawnAllGoals();
         if (_playerGoalsManager != null)
         {
             var playerGoals = _playerGoalsManager.GetPlayerGoals();
@@ -52,6 +54,15 @@ public class LevelUI : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void DeSpawnAllGoals()
+    {
+        foreach (var goal in _goals.Values)
+        {
+            _playerGoalPool.Despawn(goal);
+        }
+        _goals.Clear();
     }
 
     public void ShowUI()

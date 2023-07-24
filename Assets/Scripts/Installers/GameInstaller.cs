@@ -21,6 +21,9 @@ public class GameInstaller : MonoInstaller
         Container.Bind<ILevelManager>().To<LevelManager>().AsSingle();
         Container.Bind<IDataManager>().To<DataManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<PlayerGoalsManager>().AsSingle();
+        Container.Bind<LevelSelectionUI>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<LevelUI>().FromComponentInHierarchy().AsSingle();
+
 
         Container.Bind<Camera>().FromInstance(mainCamera).AsSingle();
 

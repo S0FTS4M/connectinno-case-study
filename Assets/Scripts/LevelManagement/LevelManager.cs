@@ -9,17 +9,17 @@ public class LevelManager : ILevelManager
 
     public event PlayerMadeAMoveHandler PlayerMadeMove;
 
-    public event Action LevelFailed;
+    public event Action<LevelData> LevelFailed;
 
-    public event Action<bool> LevelCompleted;
+    public event Action<LevelData,bool> LevelCompleted;
 
     private int _remainingMoves;
-
-    private int _highScore;
 
     private bool _isHighScoreSet;
 
     private int _score;
+
+    private LevelData _currentLevelData;
 
     public LevelManager(ILevelDataManager levelDataManager)
     {
@@ -36,7 +36,7 @@ public class LevelManager : ILevelManager
         _remainingMoves--;
         if (_remainingMoves <= 0)
         {
-            LevelFailed?.Invoke();
+            LevelFailed?.Invoke(_currentLevelData);
             return;
         }
 
@@ -47,9 +47,9 @@ public class LevelManager : ILevelManager
     {
         _score += score;
 
-        if(_score > _highScore)
+        if(_score > _currentLevelData.highScore)
         {
-            _highScore = _score;
+            _currentLevelData.highScore = _score;
             _isHighScoreSet = true;
         }
     }
@@ -57,7 +57,7 @@ public class LevelManager : ILevelManager
 
     public void GoalsAchived()
     {
-        LevelCompleted?.Invoke(_isHighScoreSet);
+        LevelCompleted?.Invoke(_currentLevelData, _isHighScoreSet);
     }
 
     public void LoadLevel(int levelNumber)
@@ -67,7 +67,8 @@ public class LevelManager : ILevelManager
         _remainingMoves = levelData.totalMoves;
         _score = 0;
         _isHighScoreSet = false;
-        _highScore = levelData.highScore;
+
+        _currentLevelData = levelData;
 
         LevelLoaded?.Invoke(levelData);
     }
