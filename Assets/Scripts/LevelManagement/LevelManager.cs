@@ -19,8 +19,8 @@ public class LevelManager : ILevelManager
         return levelDataManager.GetLevelDataList();
     }
 
-    public void LoadLevel(int index)
+    public void LoadLevel(int levelNumber)
     {
-        LevelLoaded?.Invoke(GetLevels()[index]);
+        LevelLoaded?.Invoke(GetLevels()[levelNumber - 1]);
     }
 }
