@@ -86,6 +86,7 @@ public class LevelUI : MonoBehaviour
         if (_goals.ContainsKey(playerGoalData.itemName) && playerGoalData.targetCount <= 0)
         {
             _playerGoalPool.Despawn(_goals[playerGoalData.itemName]);
+            _goals.Remove(playerGoalData.itemName);
             return;
         }
 

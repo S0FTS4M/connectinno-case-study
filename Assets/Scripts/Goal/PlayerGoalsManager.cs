@@ -7,7 +7,8 @@ public delegate void PlayerGoalUpdated(PlayerGoalData playerGoalData);
 public class PlayerGoalsManager
 {
     private List<LevelData> levelDataList;
-    List<PlayerGoalData> playerGoals;
+    
+    private List<PlayerGoalData> playerGoals;
 
     private ILevelManager _levelManager;
 

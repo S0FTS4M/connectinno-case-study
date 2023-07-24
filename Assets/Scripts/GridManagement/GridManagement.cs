@@ -17,6 +17,10 @@ public class GridManager : MonoBehaviour
 
     private GridLayoutGroup _gridLayoutGroup;
 
+    private LevelData _currentLevel;
+
+    private int tryCount = 100;
+
     [Inject]
     public void Construct(ILevelManager levelManager, TilePool tilePool, Tile.Settings tileSettings)
     {
@@ -28,10 +32,15 @@ public class GridManager : MonoBehaviour
         levelManager.LevelLoaded += OnLevelLoaded;
 
         levelManager.LevelCompleted += OnLevelCompleted;
+
+        levelManager.PlayerMadeMove += OnPlayerMadeMove;
     }
+
 
     private void OnLevelLoaded(LevelData level)
     {
+        _currentLevel = level;
+
         DespawnAllTiles();
         GenerateNewGrid(level);
     }
@@ -48,7 +57,7 @@ public class GridManager : MonoBehaviour
         {
             for (int j = 0; j < level.column; j++)
             {
-                if(_grid[i,j] != null)
+                if (_grid[i, j] != null)
                     continue;
 
                 _grid[i, j] = _tilePool.Spawn();
@@ -70,19 +79,23 @@ public class GridManager : MonoBehaviour
 
         foreach (var objective in targetObjectives)
         {
-            targetObjectiveCount += objective.count;
+            var remainingObjectiveCount = 3 - (objective.count % 3 == 0 ? 3 : objective.count % 3);
+            targetObjectiveCount += objective.count + remainingObjectiveCount;
+
         }
 
-        if(maxCellCount < targetObjectiveCount)
+        if (maxCellCount < targetObjectiveCount)
         {
             Debug.LogError("Not enough cells to fill all target objectives consider increasing the grid size or decreasing the number of target objectives!!!");
             return;
         }
 
+        var tryCount = 100;
+
         foreach (var objective in targetObjectives)
         {
             var itemData = _tileSettings.GetItemData(objective.name);
-            
+
             //NOTE: I am trying to make sure there are at least 3 items or multiples of 3 in each objective in order to make the game more playable
             var remainingObjectiveCount = 3 - (objective.count % 3 == 0 ? 3 : objective.count % 3);
 
@@ -90,15 +103,66 @@ public class GridManager : MonoBehaviour
             {
                 var rndX = UnityEngine.Random.Range(0, _grid.GetLength(0));
                 var rndY = UnityEngine.Random.Range(0, _grid.GetLength(1));
-                while (_grid[rndX, rndY].ItemData != null)
+                while (_grid[rndX, rndY].ItemData != null && tryCount > 0)
                 {
                     rndX = UnityEngine.Random.Range(0, _grid.GetLength(0));
                     rndY = UnityEngine.Random.Range(0, _grid.GetLength(1));
+                    tryCount--;
                 }
 
                 _grid[rndX, rndY].SetItemData(itemData);
+                _grid[rndX, rndY].ShowTile();
             }
         }
+    }
+
+    private bool BFSHasValidMatch(int row, int col)
+    {
+        if (_grid[row, col].IsTileAvailable == false)
+            return false;
+
+        string itemName = _grid[row, col].ItemData.itemName;
+        List<Vector2Int> visited = new List<Vector2Int>();
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        queue.Enqueue(new Vector2Int(row, col));
+        visited.Add(new Vector2Int(row, col));
+        int matchCount = 0;
+
+        while (queue.Count > 0)
+        {
+            Vector2Int currentTile = queue.Dequeue();
+            matchCount++;
+
+            // Check neighboring tiles for matches
+            // Assuming 4-directional matching, you can extend this logic to support other matching patterns
+
+            Vector2Int[] directions = new Vector2Int[]
+            {
+                new Vector2Int(0, 1), // Up
+                new Vector2Int(1, 0), // Right
+                new Vector2Int(0, -1), // Down
+                new Vector2Int(-1, 0), // Left
+                new Vector2Int(1, 1), // Diagonal Up Right
+                new Vector2Int(-1, -1), // Diagonal Down Left
+                new Vector2Int(-1, 1), // Diagonal Up Left
+                new Vector2Int(1, -1) // Diagonal Down Right
+            };
+
+            foreach (Vector2Int dir in directions)
+            {
+                int newRow = currentTile.x + dir.x;
+                int newCol = currentTile.y + dir.y;
+
+                // Check if the neighboring tile is within the grid boundaries and has the same itemName
+                if (newRow >= 0 && newRow < _currentLevel.row && newCol >= 0 && newCol < _currentLevel.column && !visited.Contains(new Vector2Int(newRow, newCol)) && _grid[newRow, newCol].IsTileAvailable && _grid[newRow, newCol].ItemData.itemName == itemName)
+                {
+                    queue.Enqueue(new Vector2Int(newRow, newCol));
+                    visited.Add(new Vector2Int(newRow, newCol));
+                }
+            }
+        }
+
+        return matchCount >= 3;
     }
 
     private void FillEmptyTilesWithRandomItems()
@@ -115,7 +179,67 @@ public class GridManager : MonoBehaviour
 
                 var randomItemData = _tileSettings.itemDatas[randomIndex];
                 _grid[i, j].SetItemData(randomItemData);
+                _grid[i, j].ShowTile();
+            
             }
+        }
+    }
+
+
+    private void ShuffleGridAndCheck()
+    {
+        SetparentTiles(null);
+        
+        for (int i = 0; i < _grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < _grid.GetLength(1); j++)
+            {
+                var temp = _grid[i, j];
+                int rndX = UnityEngine.Random.Range(0, _grid.GetLength(0));
+                int rndY = UnityEngine.Random.Range(0, _grid.GetLength(1));
+                _grid[i, j] = _grid[rndX, rndY];
+                _grid[i, j].row = i;
+                _grid[i, j].col = j;
+
+                _grid[rndX, rndY] = temp;
+                _grid[rndX, rndY].row = rndX;
+                _grid[rndX, rndY].col = rndY;
+            }
+        }
+
+        SetparentTiles(_gridParent);
+    }
+
+    private void SetparentTiles(Transform parentTransform)
+    {
+        for (int i = 0; i < _grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < _grid.GetLength(1); j++)
+            {
+                _grid[i, j].transform.SetParent(parentTransform);
+            }
+        }
+    }
+
+    private void OnPlayerMadeMove(int remainingMoves)
+    {
+        tryCount = 100;
+
+        while (tryCount > 0)
+        {
+
+            for (int i = 0; i < _grid.GetLength(0); i++)
+            {
+                for (int j = 0; j < _grid.GetLength(1); j++)
+                {
+                    if (BFSHasValidMatch(i, j))
+                        return;
+                }
+            }
+
+            ShuffleGridAndCheck();
+
+            tryCount -= 1;
         }
     }
 
@@ -133,6 +257,7 @@ public class GridManager : MonoBehaviour
         {
             for (int j = 0; j < _grid.GetLength(1); j++)
             {
+                _grid[i, j].Clear();
                 _tilePool.Despawn(_grid[i, j]);
             }
         }

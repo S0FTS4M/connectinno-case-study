@@ -40,6 +40,11 @@ public class TileView : MonoBehaviour
     {
         tileImage.gameObject.SetActive(false);
     }
+
+    public void ShowTile()
+    {
+        tileImage.gameObject.SetActive(true);
+    }
     
 }
 

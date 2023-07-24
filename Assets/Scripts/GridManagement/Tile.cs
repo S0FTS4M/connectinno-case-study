@@ -1,4 +1,5 @@
 // GridManager.cs
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -13,6 +14,8 @@ public class Tile : MonoBehaviour
     public int col;
     private ItemData _itemData; // The data representing the item on the tile
 
+    public bool IsTileAvailable { get; private set; }
+
     public ItemData ItemData => _itemData;
 
     private TileView _tileView;
@@ -20,6 +23,8 @@ public class Tile : MonoBehaviour
     private Settings _settings;
 
     private RectTransform _rectTransform;
+    private GameObject broken;
+    private Coroutine _coroutine;
 
     [Inject]
     private void Construct(Settings settings)
@@ -33,6 +38,7 @@ public class Tile : MonoBehaviour
         _tileView = GetComponent<TileView>();
         this._itemData = itemData;
         _tileView.SetTile(this);
+        IsTileAvailable = true;
     }
 
     public void OnTilePressed()
@@ -47,18 +53,18 @@ public class Tile : MonoBehaviour
 
     public void BreakTile()
     {
-        var broken = Instantiate(_settings.brokenTilePrefab, transform.position, Quaternion.identity);
+        broken = Instantiate(_settings.brokenTilePrefab, transform.position, Quaternion.identity);
         broken.transform.SetParent(transform);
         broken.transform.localPosition = Vector3.zero;
 
         foreach (Transform child in broken.transform)
         {
             var rb = child.GetComponent<Rigidbody2D>();
-            var rndVec = Random.insideUnitCircle.normalized;
+            var rndVec = UnityEngine.Random.insideUnitCircle.normalized;
             rb.AddForce(100 * rndVec, ForceMode2D.Impulse);
         }
-        
-        StartCoroutine(DestroyTile(broken));
+
+        _coroutine = StartCoroutine(DestroyTile(broken));
 
     }
 
@@ -66,11 +72,19 @@ public class Tile : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         Destroy(broken);
+        broken = null;
     }
 
     public void HideTile()
     {
         _tileView.HideTile();
+        IsTileAvailable = false;
+    }
+
+    public void ShowTile()
+    {
+        _tileView.ShowTile();
+        IsTileAvailable = true;
     }
 
     public bool IsValidNeighbor(Tile tile)
@@ -91,6 +105,19 @@ public class Tile : MonoBehaviour
     {
         Handles.Label(transform.position, row + " " + col);
     }
+
+    public void Clear()
+    {
+        _itemData = null;
+        OnTileReleased();
+        if(broken != null)
+        {
+            Destroy(broken);
+            broken = null;
+            StopCoroutine(_coroutine);
+        }
+    }
+    
 
     [System.Serializable]
     public class Settings
