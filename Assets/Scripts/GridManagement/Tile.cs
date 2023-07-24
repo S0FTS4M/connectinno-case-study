@@ -1,6 +1,7 @@
 // GridManager.cs
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using Zenject;
 // Tile.cs
@@ -85,7 +86,11 @@ public class Tile : MonoBehaviour
         // The neighbor is both adjacent and within the grid boundaries, return true
         return true;
     }
-    // Code to handle tile interactions and visuals
+
+    private void OnDrawGizmos()
+    {
+        Handles.Label(transform.position, row + " " + col);
+    }
 
     [System.Serializable]
     public class Settings
