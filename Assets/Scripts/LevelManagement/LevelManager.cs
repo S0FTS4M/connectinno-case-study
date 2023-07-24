@@ -1,8 +1,5 @@
-// LevelManager.cs
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using Zenject;
 
 public class LevelManager : ILevelManager
 {
@@ -12,13 +9,17 @@ public class LevelManager : ILevelManager
 
     public event PlayerMadeAMoveHandler PlayerMadeMove;
 
-    public event Action PlayerFailed;
+    public event Action LevelFailed;
+
+    public event Action<bool> LevelCompleted;
 
     private int _remainingMoves;
 
-    private int _score;
+    private int _highScore;
 
-    private int _highestScore;
+    private bool _isHighScoreSet;
+
+    private int _score;
 
     public LevelManager(ILevelDataManager levelDataManager)
     {
@@ -35,7 +36,7 @@ public class LevelManager : ILevelManager
         _remainingMoves--;
         if (_remainingMoves <= 0)
         {
-            PlayerFailed?.Invoke();
+            LevelFailed?.Invoke();
             return;
         }
 
@@ -45,6 +46,18 @@ public class LevelManager : ILevelManager
     public void AddScore(int score)
     {
         _score += score;
+
+        if(_score > _highScore)
+        {
+            _highScore = _score;
+            _isHighScoreSet = true;
+        }
+    }
+    
+
+    public void GoalsAchived()
+    {
+        LevelCompleted?.Invoke(_isHighScoreSet);
     }
 
     public void LoadLevel(int levelNumber)
@@ -52,8 +65,9 @@ public class LevelManager : ILevelManager
         var levelData = GetLevels()[levelNumber - 1];
 
         _remainingMoves = levelData.totalMoves;
-        _highestScore = levelData.highScore;
         _score = 0;
+        _isHighScoreSet = false;
+        _highScore = levelData.highScore;
 
         LevelLoaded?.Invoke(levelData);
     }

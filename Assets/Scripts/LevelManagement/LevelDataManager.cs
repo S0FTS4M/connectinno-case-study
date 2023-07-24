@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// ILevelDataManager.cs
+
 public interface ILevelDataManager
 {
     List<LevelData> GetLevelDataList();
 }
-// LevelDataManager.cs
+
 public class LevelDataManager : ILevelDataManager
 {
     private const string levelDataFilePath = "levelData";

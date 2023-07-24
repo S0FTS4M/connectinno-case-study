@@ -9,10 +9,13 @@ public class PlayerGoalsManager
     private List<LevelData> levelDataList;
     List<PlayerGoalData> playerGoals;
 
+    private ILevelManager _levelManager;
+
     public event PlayerGoalUpdated PlayerGoalUpdated;
 
-    public PlayerGoalsManager(ILevelDataManager levelDataManager)
+    public PlayerGoalsManager(ILevelDataManager levelDataManager, ILevelManager levelManager)
     {
+        _levelManager = levelManager;
         levelDataList = levelDataManager.GetLevelDataList();
     }
 
@@ -43,8 +46,19 @@ public class PlayerGoalsManager
         {
             return;
         }
-        
+
         playerGoal.targetCount -= amount;
+
+        if (playerGoal.targetCount <= 0)
+        {
+            playerGoals.Remove(playerGoal);
+        }
+
         PlayerGoalUpdated?.Invoke(playerGoal);
+
+        if (playerGoals.Count == 0)
+        {
+            _levelManager.GoalsAchived();
+        }
     }
 }

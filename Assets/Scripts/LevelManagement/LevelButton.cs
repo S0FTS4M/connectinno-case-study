@@ -1,5 +1,3 @@
-
-// GameManager.cs
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,8 +61,6 @@ public class LevelButton : MonoBehaviour
 
         _playerGoalsManager.InitializePlayerGoalsForLevel(_levelNumber);
         _levelManager.LoadLevel(_levelNumber);
-        // Update the highest unlocked level if the player successfully completes the current level
-        _dataManager.SetHighestUnlockedLevel(_levelNumber + 1);
     }
 
     public void SetLocked()

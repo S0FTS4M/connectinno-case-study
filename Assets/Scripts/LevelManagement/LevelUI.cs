@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using Zenject;
 using System.Collections.Generic;
-using System;
 
 public class LevelUI : MonoBehaviour
 {
