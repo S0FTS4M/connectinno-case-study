@@ -85,6 +85,7 @@ public class LevelButton : MonoBehaviour
     public void SetPlayable()
     {
         _button.interactable = true;
+        //TODO: change the ease type later 
         _playIcon.DOColor(_settings.greenColor, 2f).SetEase(Ease.InExpo);
         _highScoreGroup.SetActive(true);
     }
