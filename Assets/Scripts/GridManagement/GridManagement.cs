@@ -61,9 +61,22 @@ public class GridManager : MonoBehaviour
         FillEmptyTilesWithRandomItems();
     }
 
-    //NOTE: this can cause infinite loops so I need to check a lot of things here. But i will leave it here for now
     private void FillGridWithTargetObjectives(List<TargetObjective> targetObjectives)
     {
+        var maxCellCount = _grid.GetLength(0) * _grid.GetLength(1);
+        var targetObjectiveCount = 0;
+
+        foreach (var objective in targetObjectives)
+        {
+            targetObjectiveCount += objective.count;
+        }
+
+        if(maxCellCount < targetObjectiveCount)
+        {
+            Debug.LogError("Not enough cells to fill all target objectives consider increasing the grid size or decreasing the number of target objectives!!!");
+            return;
+        }
+
         foreach (var objective in targetObjectives)
         {
             var itemData = _tileSettings.GetItemData(objective.name);
