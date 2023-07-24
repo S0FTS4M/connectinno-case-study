@@ -1,4 +1,5 @@
 // LevelManager.cs
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -8,6 +9,10 @@ public class LevelManager : ILevelManager
     private ILevelDataManager levelDataManager;
 
     public event LevelLoadedHandler LevelLoaded;
+    
+    public event PlayerMadeAMoveHandler PlayerMadeMove;
+
+    private int _remainingMoves;
 
     public LevelManager(ILevelDataManager levelDataManager)
     {
@@ -19,8 +24,18 @@ public class LevelManager : ILevelManager
         return levelDataManager.GetLevelDataList();
     }
 
+    public void PlayerMadeAMove()
+    {
+        _remainingMoves--;
+        PlayerMadeMove?.Invoke(_remainingMoves);
+    }
+
     public void LoadLevel(int levelNumber)
     {
-        LevelLoaded?.Invoke(GetLevels()[levelNumber - 1]);
+        var levelData = GetLevels()[levelNumber - 1];
+
+        _remainingMoves = levelData.totalMoves;
+
+        LevelLoaded?.Invoke(levelData);
     }
 }

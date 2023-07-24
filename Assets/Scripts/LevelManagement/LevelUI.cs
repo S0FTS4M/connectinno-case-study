@@ -10,9 +10,7 @@ public class LevelUI : MonoBehaviour
     [SerializeField] private GameObject _container;
     [SerializeField] private Transform _goalContainer;
 
-    private int _currentLevelNumber;
-    private int _currentMoveCount;
-    private int _remainingMoves;
+    private LevelData currentLevelData;
 
     private PlayerGoalsManager _playerGoalsManager;
 
@@ -28,12 +26,12 @@ public class LevelUI : MonoBehaviour
         levelManager.LevelLoaded += OnLevelLoaded;
 
         _playerGoalsManager.PlayerGoalUpdated += OnPlayerGoalUpdated;
+        levelManager.PlayerMadeMove += OnPlayerMove;
     }
 
     public void Initialize(LevelData level)
     {
-        _currentLevelNumber = level.levelNumber;
-        _currentMoveCount = level.totalMoves;
+        currentLevelData = level;
         SetupUI();
     }
 
@@ -44,7 +42,7 @@ public class LevelUI : MonoBehaviour
             var playerGoals = _playerGoalsManager.GetPlayerGoals();
             if (playerGoals != null)
             {
-                _moveCountText.text = _currentMoveCount.ToString();
+                _moveCountText.text = currentLevelData.totalMoves.ToString();
 
                 for (int i = 0; i < playerGoals.Count; i++)
                 {
@@ -68,10 +66,9 @@ public class LevelUI : MonoBehaviour
     }
 
     // Call this method whenever the player makes a move
-    public void OnPlayerMove()
+    public void OnPlayerMove(int remainingMoves)
     {
-        _currentMoveCount++;
-        _moveCountText.text = _currentMoveCount.ToString();
+        _moveCountText.text = remainingMoves.ToString();
     }
 
     private void OnPlayerGoalUpdated(PlayerGoalData playerGoalData)

@@ -14,12 +14,15 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     private PlayerGoalsManager _playerGoalsManager;
 
+    private ILevelManager _levelManager;
+
     private Tile _prevTile;
 
     [Inject]
-    private void Construct(PlayerGoalsManager playerGoalsManager)
+    private void Construct(PlayerGoalsManager playerGoalsManager, ILevelManager levelManager)
     {
         _playerGoalsManager = playerGoalsManager;
+        _levelManager = levelManager;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -54,8 +57,7 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             {
                 RevertTileChanges();
                 ResetState();
-                //TODO: update move count
-
+                _levelManager.PlayerMadeAMove();
             }
             
         }
@@ -71,25 +73,18 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             RevertTileChanges();
 
             ResetState();
+
+            _levelManager.PlayerMadeAMove();
             return;
         }
 
-        //Check if connected tiles are actually has connection. 
-        //Player can try to connect tiles around the map
-
         foreach(var tile in _connectedTiles)
         {
-            //EXPLODE tile
-
             tile.HideTile();
 
             tile.BreakTile();
-
-            //Update move
-
-            //Check goals and update
         }
-
+        _levelManager.PlayerMadeAMove();
         _playerGoalsManager.UpdatePlayerGoal(_selectedItemName, _connectedTiles.Count);
 
         ResetState();
