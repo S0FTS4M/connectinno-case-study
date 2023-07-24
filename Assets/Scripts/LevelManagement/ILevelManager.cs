@@ -9,6 +9,8 @@ public interface ILevelManager
 
     void LoadLevel(int index);
     void PlayerMadeAMove();
+    void AddScore(int score);
+    
 }
 
 public delegate void LevelLoadedHandler(LevelData level);

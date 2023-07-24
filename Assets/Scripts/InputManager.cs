@@ -84,6 +84,7 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
             tile.BreakTile();
         }
+        _levelManager.AddScore(_connectedTiles.Count);
         _levelManager.PlayerMadeAMove();
         _playerGoalsManager.UpdatePlayerGoal(_selectedItemName, _connectedTiles.Count);
 

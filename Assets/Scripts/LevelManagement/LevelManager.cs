@@ -16,6 +16,10 @@ public class LevelManager : ILevelManager
 
     private int _remainingMoves;
 
+    private int _score;
+
+    private int _highestScore;
+
     public LevelManager(ILevelDataManager levelDataManager)
     {
         this.levelDataManager = levelDataManager;
@@ -38,11 +42,18 @@ public class LevelManager : ILevelManager
         PlayerMadeMove?.Invoke(_remainingMoves);
     }
 
+    public void AddScore(int score)
+    {
+        _score += score;
+    }
+
     public void LoadLevel(int levelNumber)
     {
         var levelData = GetLevels()[levelNumber - 1];
 
         _remainingMoves = levelData.totalMoves;
+        _highestScore = levelData.highScore;
+        _score = 0;
 
         LevelLoaded?.Invoke(levelData);
     }
