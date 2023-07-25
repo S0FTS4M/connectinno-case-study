@@ -25,6 +25,7 @@ public class GridManager : MonoBehaviour
 
     private PlayerGoalsManager _goalsManager;
 
+
     [Inject]
     public void Construct(ILevelManager levelManager, TilePool tilePool, Tile.Settings tileSettings, PlayerGoalsManager goalsManager)
     {
