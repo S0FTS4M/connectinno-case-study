@@ -56,6 +56,9 @@ public class Tile : MonoBehaviour
 
     public void BreakTile()
     {
+        if(gameObject.activeSelf == false)
+            return;
+
         broken = Instantiate(_settings.brokenTilePrefab, transform.position, Quaternion.identity);
         broken.transform.SetParent(transform);
         broken.transform.localPosition = Vector3.zero;
@@ -67,7 +70,6 @@ public class Tile : MonoBehaviour
             var rndVec = UnityEngine.Random.insideUnitCircle.normalized;
             rb.AddForce(5 * rndVec, ForceMode2D.Impulse);
         }
-
         _coroutine = StartCoroutine(DestroyTile(broken));
 
     }
