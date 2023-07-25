@@ -14,6 +14,9 @@ public class PlayerGoalsManager
 
     public event PlayerGoalUpdated PlayerGoalUpdated;
 
+        
+    public bool IsGoalsAchived => playerGoals.Count == 0;
+
     public PlayerGoalsManager(ILevelDataManager levelDataManager, ILevelManager levelManager)
     {
         _levelManager = levelManager;
