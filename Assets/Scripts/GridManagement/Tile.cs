@@ -39,6 +39,9 @@ public class Tile : MonoBehaviour
         this._itemData = itemData;
         _tileView.SetTile(this);
         IsTileAvailable = true;
+
+        transform.localPosition = Vector3.zero;
+        transform.localScale = Vector3.one;
     }
 
     public void OnTilePressed()
@@ -56,12 +59,13 @@ public class Tile : MonoBehaviour
         broken = Instantiate(_settings.brokenTilePrefab, transform.position, Quaternion.identity);
         broken.transform.SetParent(transform);
         broken.transform.localPosition = Vector3.zero;
+        broken.transform.localScale = Vector3.one;
 
         foreach (Transform child in broken.transform)
         {
             var rb = child.GetComponent<Rigidbody2D>();
             var rndVec = UnityEngine.Random.insideUnitCircle.normalized;
-            rb.AddForce(100 * rndVec, ForceMode2D.Impulse);
+            rb.AddForce(5 * rndVec, ForceMode2D.Impulse);
         }
 
         _coroutine = StartCoroutine(DestroyTile(broken));

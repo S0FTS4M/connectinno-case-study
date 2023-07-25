@@ -58,6 +58,9 @@ public class LevelButton : MonoBehaviour
         // Add the button click listener
         _button.onClick.RemoveAllListeners();
         _button.onClick.AddListener(OnPlayButtonClicked);
+
+        transform.localPosition = Vector3.zero;
+        transform.localScale = Vector3.one;
     }
 
     public void OnPlayButtonClicked()

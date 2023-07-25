@@ -217,6 +217,8 @@ public class GridManager : MonoBehaviour
             for (int j = 0; j < _grid.GetLength(1); j++)
             {
                 _grid[i, j].transform.SetParent(parentTransform);
+                _grid[i, j].transform.localPosition = Vector3.zero;
+                _grid[i, j].transform.localScale = Vector3.one;
             }
         }
     }

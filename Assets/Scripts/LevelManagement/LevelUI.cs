@@ -51,6 +51,9 @@ public class LevelUI : MonoBehaviour
                     playerGoal.transform.SetParent(_goalContainer);
                     playerGoal.SetGoal(playerGoals[i]);
                     _goals.Add(playerGoals[i].itemName, playerGoal);
+
+                    playerGoal.transform.localPosition = Vector3.zero;
+                    playerGoal.transform.localScale = Vector3.one;
                 }
             }
         }
