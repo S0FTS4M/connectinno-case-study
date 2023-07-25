@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using Zenject;
 // Tile.cs
@@ -56,7 +58,7 @@ public class Tile : MonoBehaviour
 
     public void BreakTile()
     {
-        if(gameObject.activeSelf == false)
+        if (gameObject.activeSelf == false)
             return;
 
         broken = Instantiate(_settings.brokenTilePrefab, transform.position, Quaternion.identity);
@@ -107,23 +109,26 @@ public class Tile : MonoBehaviour
         return true;
     }
 
+
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Handles.Label(transform.position, row + " " + col);
     }
 
+#endif
     public void Clear()
     {
         _itemData = null;
         OnTileReleased();
-        if(broken != null)
+        if (broken != null)
         {
             Destroy(broken);
             broken = null;
             StopCoroutine(_coroutine);
         }
     }
-    
+
 
     [System.Serializable]
     public class Settings
