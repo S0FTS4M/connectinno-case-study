@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class LevelManager : ILevelManager
 {
@@ -12,6 +13,10 @@ public class LevelManager : ILevelManager
     public event Action<LevelData> LevelFailed;
 
     public event Action<LevelData,bool> LevelCompleted;
+
+    public event Action PlayerOutOfMoves;
+
+    public event Action NoAvailableSetFound;
 
     private int _remainingMoves;
 
@@ -36,7 +41,11 @@ public class LevelManager : ILevelManager
         _remainingMoves--;
         if (_remainingMoves <= 0)
         {
-            LevelFailed?.Invoke(_currentLevelData);
+            _currentLevelData.highScore = 0;
+            var seq = DOTween.Sequence();
+            seq.AppendCallback(() => PlayerOutOfMoves?.Invoke());
+            seq.AppendInterval(2f);
+            seq.AppendCallback(()=> LevelFailed?.Invoke(_currentLevelData));
             return;
         }
 
@@ -52,6 +61,15 @@ public class LevelManager : ILevelManager
             _currentLevelData.highScore = _score;
             _isHighScoreSet = true;
         }
+    }
+
+    public void NoAvailableSet()
+    {
+        _currentLevelData.highScore = 0;
+        var seq =DOTween.Sequence();
+        seq.AppendCallback(()=> NoAvailableSetFound?.Invoke());
+        seq.AppendInterval(2f);
+        seq.AppendCallback(()=> LevelFailed?.Invoke(_currentLevelData));
     }
     
 

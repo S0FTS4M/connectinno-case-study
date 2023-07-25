@@ -5,6 +5,10 @@ public interface ILevelManager
 {
     event LevelLoadedHandler LevelLoaded;
     event PlayerMadeAMoveHandler PlayerMadeMove;
+    event Action PlayerOutOfMoves;
+
+    event Action NoAvailableSetFound;
+    
     event Action<LevelData> LevelFailed;
     event Action<LevelData,bool> LevelCompleted;
     List<LevelData> GetLevels();
@@ -13,6 +17,7 @@ public interface ILevelManager
     void PlayerMadeAMove();
     void AddScore(int score);
     void GoalsAchived();
+    void NoAvailableSet();
     
 }
 
