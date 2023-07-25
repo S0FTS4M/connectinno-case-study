@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
@@ -28,7 +29,7 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     public void OnBeginDrag(PointerEventData eventData)
     {
         var tile = GetTileUnderTouch(eventData);
-        if(tile != null)
+        if (tile != null)
         {
             _selectedItemName = tile.ItemData.itemName;
             _isConnecting = true;
@@ -41,13 +42,13 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     public void OnDrag(PointerEventData eventData)
     {
-        if(_isConnecting == false)
+        if (_isConnecting == false)
             return;
 
         var tile = GetTileUnderTouch(eventData);
-        if(tile != null && _connectedTiles.Contains(tile) == false)
+        if (tile != null && _connectedTiles.Contains(tile) == false)
         {
-            if(tile.ItemData.itemName == _selectedItemName && _prevTile.IsValidNeighbor(tile))
+            if (tile.ItemData.itemName == _selectedItemName && _prevTile.IsValidNeighbor(tile))
             {
                 _connectedTiles.Add(tile);
                 tile.OnTilePressed();
@@ -59,16 +60,16 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 ResetState();
                 _levelManager.PlayerMadeAMove();
             }
-            
+
         }
-    
+
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(_isConnecting == false)
+        if (_isConnecting == false)
             return;
-        if(_connectedTiles.Count < 3)
+        if (_connectedTiles.Count < 3)
         {
             RevertTileChanges();
 
@@ -78,15 +79,18 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             return;
         }
 
-        foreach(var tile in _connectedTiles)
+        var seq = DOTween.Sequence();
+        foreach (var tile in _connectedTiles)
         {
-            tile.HideTile();
-
-            tile.BreakTile();
+            seq.AppendCallback(() => tile.HideTile());
+            seq.AppendCallback(() => tile.BreakTile());
+            seq.AppendInterval(0.05f);
         }
         _levelManager.AddScore(_connectedTiles.Count);
-        _levelManager.PlayerMadeAMove();
-        _playerGoalsManager.UpdatePlayerGoal(_selectedItemName, _connectedTiles.Count);
+        
+        seq.AppendInterval(0.2f);
+        seq.AppendCallback(_levelManager.PlayerMadeAMove);
+        seq.AppendCallback(() => _playerGoalsManager.UpdatePlayerGoal(_selectedItemName, _connectedTiles.Count));
 
         ResetState();
     }
@@ -101,12 +105,12 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
     private void RevertTileChanges()
     {
-        foreach(var tile in _connectedTiles)
+        foreach (var tile in _connectedTiles)
         {
             tile.OnTileReleased();
         }
     }
-    
+
 
     private Tile GetTileUnderTouch(PointerEventData eventData)
     {
@@ -115,7 +119,7 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         for (int i = 0; i < result.Count; i++)
         {
             var tile = result[i].gameObject.GetComponentInParent<Tile>();
-            if(tile != null)
+            if (tile != null)
             {
                 return tile;
             }
