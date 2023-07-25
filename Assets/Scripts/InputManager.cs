@@ -87,12 +87,12 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
             seq.AppendInterval(0.05f);
         }
         _levelManager.AddScore(_connectedTiles.Count);
-        
+
         seq.AppendInterval(0.2f);
-        seq.AppendCallback(_levelManager.PlayerMadeAMove);
         var selectedItemName = _selectedItemName;
         var itemAmount = _connectedTiles.Count;
-    seq.AppendCallback(() => _playerGoalsManager.UpdatePlayerGoal(selectedItemName, itemAmount));
+        seq.AppendCallback(() => _playerGoalsManager.UpdatePlayerGoal(selectedItemName, itemAmount));
+        seq.AppendCallback(_levelManager.PlayerMadeAMove);
 
         ResetState();
     }
