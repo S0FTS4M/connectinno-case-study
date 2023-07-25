@@ -159,6 +159,106 @@
                     "name": "Grape"
                 }
             ]
+        },
+        {
+            "levelNumber": 11,
+            "totalMoves": 20,
+            "row": 6,
+            "column": 6,
+            "targetObjectives": [
+                {
+                    "name": "Apple",
+                    "count": 5
+                },
+                {
+                    "name": "GreenLeaf",
+                    "count": 7
+                },
+                {
+                    "name": "DragonFruit",
+                    "count": 2
+                }
+            ]
+        },
+        {
+            "levelNumber": 12,
+            "totalMoves": 22,
+            "row": 7,
+            "column": 7,
+            "targetObjectives": [
+                {
+                    "name": "Apple",
+                    "count": 4
+                },
+                {
+                    "name": "Pumpkin",
+                    "count": 5
+                },
+                {
+                    "name": "Banana",
+                    "count": 3
+                }
+            ]
+        },
+        {
+            "levelNumber": 13,
+            "totalMoves": 25,
+            "row": 6,
+            "column": 7,
+            "targetObjectives": [
+                {
+                    "name": "Apple",
+                    "count": 6
+                },
+                {
+                    "name": "Grape",
+                    "count": 4
+                },
+                {
+                    "name": "WaterDrop",
+                    "count": 7
+                }
+            ]
+        },
+        {
+            "levelNumber": 14,
+            "totalMoves": 26,
+            "row": 8,
+            "column": 8,
+            "targetObjectives": [
+                {
+                    "name": "Apple",
+                    "count": 4
+                },
+                {
+                    "name": "GreenLeaf",
+                    "count": 6
+                },
+                {
+                    "name": "Pumpkin",
+                    "count": 3
+                }
+            ]
+        },
+        {
+            "levelNumber": 15,
+            "totalMoves": 28,
+            "row": 9,
+            "column": 9,
+            "targetObjectives": [
+                {
+                    "name": "Apple",
+                    "count": 5
+                },
+                {
+                    "name": "Banana",
+                    "count": 4
+                },
+                {
+                    "name": "DragonFruit",
+                    "count": 6
+                }
+            ]
         }
     ]
 }
