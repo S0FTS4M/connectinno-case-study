@@ -1766,6 +1766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e73020a0e7ba084ea16bbfae9939b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  highScoreUI: {fileID: 315694940}
   levelCompleteParticleSystem: {fileID: 1230390075}
 --- !u!4 &1216753914
 Transform:
