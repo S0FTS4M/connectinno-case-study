@@ -19,30 +19,28 @@ public class GridManager : MonoBehaviour
 
     private LevelData _currentLevel;
 
+    private ILevelManager _levelManager;
+
     private int tryCount = 100;
 
+    private PlayerGoalsManager _goalsManager;
+
     [Inject]
-    public void Construct(ILevelManager levelManager, TilePool tilePool, Tile.Settings tileSettings)
+    public void Construct(ILevelManager levelManager, TilePool tilePool, Tile.Settings tileSettings, PlayerGoalsManager goalsManager)
     {
         _tilePool = tilePool;
         _tileSettings = tileSettings;
+        _levelManager = levelManager;
+        _goalsManager = goalsManager;
 
         _gridLayoutGroup = _gridParent.GetComponent<GridLayoutGroup>();
 
         levelManager.LevelLoaded += OnLevelLoaded;
 
         levelManager.LevelCompleted += OnLevelCompleted;
+        levelManager.LevelFailed += OnLevelFailed;
 
         levelManager.PlayerMadeMove += OnPlayerMadeMove;
-    }
-
-
-    private void OnLevelLoaded(LevelData level)
-    {
-        _currentLevel = level;
-
-        DespawnAllTiles();
-        GenerateNewGrid(level);
     }
 
     private void GenerateNewGrid(LevelData level)
@@ -222,9 +220,24 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+    private void OnLevelFailed(LevelData data)
+    {
+        DespawnAllTiles();
+    }
+
+    private void OnLevelLoaded(LevelData level)
+    {
+        _currentLevel = level;
+
+        DespawnAllTiles();
+        GenerateNewGrid(level);
+    }
 
     private void OnPlayerMadeMove(int remainingMoves)
     {
+        if(_goalsManager.IsGoalsAchived)
+            return;
+            
         tryCount = 100;
 
         while (tryCount > 0)
@@ -243,7 +256,12 @@ public class GridManager : MonoBehaviour
 
             tryCount -= 1;
         }
+        if(tryCount <= 0)
+        {
+            _levelManager.NoAvailableSet();   
+        }
     }
+    
 
     private void OnLevelCompleted(LevelData levelData, bool isHighScoreSet)
     {
