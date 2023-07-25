@@ -46,7 +46,6 @@ public class LevelButton : MonoBehaviour
         bool isPlayable = _levelNumber <= _dataManager.GetHighestUnlockedLevel();
 
         var displayHighScore = levelData.highScore > 0;
-        Debug.Log(displayHighScore);
         _highScoreGroup.gameObject.SetActive(displayHighScore);
         
 

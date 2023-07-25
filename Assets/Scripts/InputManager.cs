@@ -90,7 +90,9 @@ public class InputManager : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
         
         seq.AppendInterval(0.2f);
         seq.AppendCallback(_levelManager.PlayerMadeAMove);
-        seq.AppendCallback(() => _playerGoalsManager.UpdatePlayerGoal(_selectedItemName, _connectedTiles.Count));
+        var selectedItemName = _selectedItemName;
+        var itemAmount = _connectedTiles.Count;
+    seq.AppendCallback(() => _playerGoalsManager.UpdatePlayerGoal(selectedItemName, itemAmount));
 
         ResetState();
     }
